@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "..\SmartPointers\AutoPtr.h"
 #include "CppUnitTest.h"
 
