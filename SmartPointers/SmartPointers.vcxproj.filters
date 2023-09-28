@@ -24,5 +24,8 @@
     <ClInclude Include="SharedPtr.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="BasePtr.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
