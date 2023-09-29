@@ -27,4 +27,26 @@ public:
     myPtr_ = ptr.release();
     return *this;
   }
+
+  // dtr
+  ~UniquePtr()
+  {
+    delete myPtr_;
+  }
+
+  // release
+  T * release()
+  {
+    auto tmp = myPtr_;
+    myPtr_ = nullptr;
+    return tmp;
+  }
+
+  // reset
+  void reset( T * ptr = nullptr )
+  {
+    if ( ptr != myPtr_ )
+      delete myPtr_;
+    myPtr_ = ptr;
+  }
 };

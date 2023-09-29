@@ -1,1 +1,85 @@
 #pragma once
+#include "BasePtr.h"
+
+// Simple implementation of SharedPtr
+template<class T>
+class SharedPtr : public BasePtr<T>
+{
+  int* rep_use_ = nullptr;
+
+public:
+
+  // default_ctr
+  SharedPtr( T* ptr = nullptr ) : BasePtr( ptr )
+  {
+    rep_use_ = new int( 0 );
+    if ( ptr )
+      *rep_use_ = 1;
+  }
+
+  // copy_ctr
+  SharedPtr( SharedPtr & right )
+  {
+    myPtr_ = right.myPtr_;
+    ++( *right.rep_use_ );
+    rep_use_ = right.rep_use_;
+  }
+
+  // copy_operator
+  SharedPtr & operator = ( SharedPtr & right )
+  {
+    myPtr_ = right.myPtr_;
+    ++( *right.rep_use_ );
+    rep_use_ = right.rep_use_;
+    return *this;
+  }
+
+  // move_ctr
+  SharedPtr( SharedPtr && right )
+  {
+    myPtr_ = right.myPtr_;
+    rep_use_ = right.rep_use_;
+    right.myPtr_ = nullptr;
+    right.rep_use_ = nullptr;
+  }
+
+  // move_operator
+  SharedPtr & operator = ( SharedPtr && right )
+  {
+    // TODO: SharedPtr( std::move( right ) ).swap( *this );
+    // TODO: void swap( SharedPtr &  )
+
+    myPtr_ = right.myPtr_;
+    rep_use_ = right.rep_use_;
+    right.myPtr_ = nullptr;
+    right.rep_use_ = nullptr;
+    ( *rep_use_ )--;
+    return *this;
+  }
+
+  // dtr
+  ~SharedPtr()
+  {
+    if ( rep_use_ && --( *rep_use_ ) == 0 )
+    {
+      delete rep_use_;
+      rep_use_ = nullptr;
+      delete myPtr_;
+      myPtr_ = nullptr;
+    }
+  }
+
+  // reset
+  void reset()
+  {
+    ( *this ).~SharedPtr();
+    rep_use_ = nullptr;
+    myPtr_ = nullptr;
+  }
+
+  // strong ref count (use)
+  long use_count() const
+  {
+    return rep_use_ ? *rep_use_ : 0;
+  }
+};

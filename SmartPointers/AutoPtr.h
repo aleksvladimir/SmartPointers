@@ -21,4 +21,26 @@ public:
     myPtr_ = right.release();
     return *this;
   }
+
+  // dtr
+  ~AutoPtr()
+  {
+    delete myPtr_;
+  }
+
+  // release
+  T * release()
+  {
+    auto tmp = myPtr_;
+    myPtr_ = nullptr;
+    return tmp;
+  }
+
+  // reset
+  void reset( T * ptr = nullptr )
+  {
+    if ( ptr != myPtr_ )
+      delete myPtr_;
+    myPtr_ = ptr;
+  }
 };
