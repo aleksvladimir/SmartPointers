@@ -1,13 +1,13 @@
 #pragma once
-#include "BasePtr.h"
+#include "BaseStrongPtr.h"
 
 template<class T>
-class AutoPtr : public BasePtr<T>
+class AutoPtr : public BaseStrongPtr<T>
 {
 public:
 
   // default_ctr
-  AutoPtr( T * ptr = nullptr ) : BasePtr( ptr ) {}
+  AutoPtr( T * ptr = nullptr ) : BaseStrongPtr( ptr ) {}
 
   // copy_ctr
   AutoPtr( AutoPtr<T> & autoPtr )

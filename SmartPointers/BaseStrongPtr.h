@@ -1,7 +1,7 @@
 #pragma once
 
 template<class T>
-class BasePtr
+class BaseStrongPtr
 {
 protected:
   T * myPtr_ = nullptr;
@@ -9,7 +9,7 @@ protected:
 public:
 
   // default_ctr
-  BasePtr( T * ptr = nullptr ) : myPtr_( ptr ) {}
+  BaseStrongPtr( T * ptr = nullptr ) : myPtr_( ptr ) {}
 
   // get
   T * get()

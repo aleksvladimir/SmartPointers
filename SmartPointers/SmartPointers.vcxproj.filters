@@ -24,7 +24,10 @@
     <ClInclude Include="SharedPtr.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="BasePtr.h">
+    <ClInclude Include="BaseStrongPtr.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="WeakPtr.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

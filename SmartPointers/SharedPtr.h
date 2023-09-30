@@ -1,16 +1,16 @@
 #pragma once
-#include "BasePtr.h"
+#include "BaseStrongPtr.h"
 
 // Simple implementation of SharedPtr
 template<class T>
-class SharedPtr : public BasePtr<T>
+class SharedPtr : public BaseStrongPtr<T>
 {
   int* rep_use_ = nullptr;
 
 public:
 
   // default_ctr
-  SharedPtr( T* ptr = nullptr ) : BasePtr( ptr )
+  SharedPtr( T* ptr = nullptr ) : BaseStrongPtr( ptr )
   {
     rep_use_ = new int( 0 );
     if ( ptr )

@@ -1,13 +1,13 @@
 #pragma once
-#include "BasePtr.h"
+#include "BaseStrongPtr.h"
 
 template<class T>
-class UniquePtr : public BasePtr<T>
+class UniquePtr : public BaseStrongPtr<T>
 {
 public:
 
   // default_ctr
-  UniquePtr( T * ptr = nullptr ) : BasePtr( ptr ) {}
+  UniquePtr( T * ptr = nullptr ) : BaseStrongPtr( ptr ) {}
 
   // copy_ctr
   UniquePtr( const UniquePtr & ptr ) = delete;
