@@ -1,3 +1,4 @@
+#include "..\SmartPointers\WeakPtr.h"
 #include "..\SmartPointers\SharedPtr.h"
 #include "..\SmartPointers\UniquePtr.h"
 #include "..\SmartPointers\AutoPtr.h"
@@ -331,22 +332,22 @@ namespace SmartPointerTests
 				Assert::IsTrue( a_ptr1.expired() );
 			}
 			{
-				// copy_ctr weak-make_shared
-				std::weak_ptr<int> a_ptr0( std::make_shared<int>( 2 ) );
-				Assert::AreEqual( 0, static_cast< int >( a_ptr0.use_count() ) );
-				Assert::IsTrue( a_ptr0.expired() );
+				// copy_ctr weak r-value shared_ptr
+				std::weak_ptr<int> a_ptr1( std::shared_ptr<int>( new int( 2 ) ) );
+				Assert::AreEqual( 0, static_cast< int >( a_ptr1.use_count() ) );
+				Assert::IsTrue( a_ptr1.expired() );
 			}
 			{
-				// copy_ctr weak-weak-make_shared
-				std::weak_ptr<int> a_ptr0( std::make_shared<int>( 2 ) );
-				auto a_ptr1( a_ptr0 );
-				Assert::IsTrue( a_ptr1.expired() );
-				Assert::AreEqual( 0, static_cast< int >( a_ptr0.use_count() ) );
-				Assert::IsTrue( a_ptr0.use_count() == a_ptr1.use_count() );
+				// copy_ctr weak-weak r-value shared_ptr
+				std::weak_ptr<int> a_ptr1( std::shared_ptr<int>( new int( 2 ) ) );
+				auto a_ptr2( a_ptr1 );
+				Assert::IsTrue( a_ptr2.expired() );
+				Assert::AreEqual( 0, static_cast< int >( a_ptr1.use_count() ) );
+				Assert::IsTrue( a_ptr1.use_count() == a_ptr2.use_count() );
 			}
 			{
 				// copy_ctr weak-shared
-				std::shared_ptr<int> a_ptr0( std::make_shared<int>( 4 ) );
+				std::shared_ptr<int> a_ptr0( new int( 4 ) );
 				std::weak_ptr<int> a_ptr1( a_ptr0 );
 				std::weak_ptr<int> a_ptr2( a_ptr1 );
 				Assert::AreEqual( 1, static_cast< int >( a_ptr0.use_count() ) );
@@ -364,7 +365,7 @@ namespace SmartPointerTests
 			{
 				// copy_operator weak-shared
 				std::weak_ptr<int> a_ptr0;
-				std::shared_ptr<int> a_ptr1( std::make_shared<int>( 4 ) );
+				std::shared_ptr<int> a_ptr1( new int( 4 ) );
 				a_ptr0 = a_ptr1;
 				Assert::IsTrue( !a_ptr0.expired() );
 			}
@@ -386,13 +387,13 @@ namespace SmartPointerTests
 			}
 			{
 				// expired
-				std::shared_ptr<int> a_ptr0( std::make_shared<int>( 4 ) );
+				std::shared_ptr<int> a_ptr0( new int( 4 ) );
 				std::weak_ptr<int> a_ptr1( a_ptr0 );
 				Assert::IsTrue( !a_ptr1.expired() );
 			}
 			{
 				// reset
-				std::shared_ptr<int> a_ptr0( std::make_shared<int>( 4 ) );
+				std::shared_ptr<int> a_ptr0( new int( 4 ) );
 				auto a_ptr1( a_ptr0 );
 				auto a_ptr2( a_ptr1 );	// Use_ == 3
 				Assert::AreEqual( 3, static_cast< int >( a_ptr0.use_count() ) );
@@ -412,15 +413,15 @@ namespace SmartPointerTests
 				Assert::IsTrue( !a_ptrW1.expired() );
 			}
 			{
-				// lock empty weak_ptr
-				std::weak_ptr<int> a_ptr0( std::make_shared<int>( 4 ) );
+				// lock empty weak_ptr r-value shared_ptr
+				std::weak_ptr<int> a_ptr0( std::shared_ptr<int>( new int( 4 ) ) );
 				auto a_ptr1 = a_ptr0.lock();
 				Assert::IsTrue( a_ptr0.expired() );	// from empty weak_ptr (Use_ == 0) we cant create shared_ptr
 			}
 			{
 				// lock not empty weak_ptr:
 				//	copy-ctr shared_ptr from not empty weak_ptr
-				std::shared_ptr<int> a_ptr0( std::make_shared<int>( 4 ) );
+				std::shared_ptr<int> a_ptr0( new int( 4 ) );
 				auto a_ptr1( a_ptr0 );
 				Assert::AreEqual( 2, static_cast< int >( a_ptr0.use_count() ) );
 				a_ptr0.reset();
@@ -428,6 +429,125 @@ namespace SmartPointerTests
 				Assert::AreEqual( 0, static_cast< int >( a_ptr0.use_count() ) );
 				Assert::AreEqual( 1, static_cast< int >( a_ptr1.use_count() ) );
 				std::weak_ptr<int> a_ptr2( a_ptr1 );
+				a_ptr0 = a_ptr2.lock();
+				Assert::AreEqual( 2, static_cast< int >( a_ptr0.use_count() ) );
+				Assert::AreEqual( 2, static_cast< int >( a_ptr1.use_count() ) );
+			}
+		}
+
+		TEST_METHOD( Test_WeakPtr )
+		{
+			{
+				// default_ctr nullptr
+				WeakPtr<int> a_ptr0;
+				Assert::AreEqual( 0, static_cast< int >( a_ptr0.use_count() ) );
+				Assert::IsTrue( a_ptr0.expired() );
+			}
+			{
+				// copy_ctr weak-weak
+				WeakPtr<int> a_ptr0;
+				WeakPtr<int> a_ptr1( a_ptr0 );
+				Assert::AreEqual( 0, static_cast< int >( a_ptr1.use_count() ) );
+				Assert::IsTrue( a_ptr1.expired() );
+			}
+			{
+				// copy_ctr weak r-value shared_ptr
+				WeakPtr<int> a_ptr1( SharedPtr<int>( new int( 2 ) ) );
+				Assert::AreEqual( 0, static_cast< int >( a_ptr1.use_count() ) );
+				Assert::IsTrue( a_ptr1.expired() );
+			}
+			{
+				// copy_ctr weak-weak r-value shared_ptr
+				WeakPtr<int> a_ptr1( SharedPtr<int>( new int( 2 ) ) );
+				auto a_ptr2( a_ptr1 );
+				Assert::IsTrue( a_ptr2.expired() );
+				Assert::AreEqual( 0, static_cast< int >( a_ptr1.use_count() ) );
+				Assert::IsTrue( a_ptr1.use_count() == a_ptr2.use_count() );
+			}
+			{
+				// copy_ctr weak-shared
+				SharedPtr<int> a_ptr0( new int( 4 ) );
+				WeakPtr<int> a_ptr1( a_ptr0 );
+				WeakPtr<int> a_ptr2( a_ptr1 );
+				Assert::AreEqual( 1, static_cast< int >( a_ptr0.use_count() ) );
+				Assert::AreEqual( 1, static_cast< int >( a_ptr1.use_count() ) );
+				Assert::AreEqual( 1, static_cast< int >( a_ptr2.use_count() ) );
+				Assert::IsTrue( !a_ptr1.expired() );
+				Assert::IsTrue( !a_ptr2.expired() );
+			}
+			{
+				// copy_operator weak-weak
+				WeakPtr<int> a_ptr0;
+				WeakPtr<int> a_ptr1;
+				a_ptr0 = a_ptr1;
+			}
+			{
+				// copy_operator weak-shared
+				WeakPtr<int> a_ptr0;
+				SharedPtr<int> a_ptr1( new int( 4 ) );
+				a_ptr0 = a_ptr1;
+				Assert::IsTrue( !a_ptr0.expired() );
+			}
+			{
+				// move_ctr
+				WeakPtr<int> a_ptr0;
+				auto a_ptr1( std::move( a_ptr0 ) );
+			}
+			{
+				// move_operator
+				WeakPtr<int> a_ptr0;
+				WeakPtr<int> a_ptr1;
+				a_ptr1 = std::move( a_ptr0 );
+			}
+			{
+				//reference
+				WeakPtr<int> a_ptr0;
+				auto & a_ptr8 = a_ptr0;
+			}
+			{
+				// expired
+				SharedPtr<int> a_ptr0( new int( 4 ) );
+				WeakPtr<int> a_ptr1( a_ptr0 );
+				Assert::IsTrue( !a_ptr1.expired() );
+			}
+			{
+				// reset
+				SharedPtr<int> a_ptr0( new int( 4 ) );
+				auto a_ptr1( a_ptr0 );
+				auto a_ptr2( a_ptr1 );	// Use_ == 3
+				Assert::AreEqual( 3, static_cast< int >( a_ptr0.use_count() ) );
+				WeakPtr<int> a_ptrW0( a_ptr0 );
+				auto a_ptrW1( a_ptrW0 );
+				auto a_ptrW2( a_ptrW1 );
+				auto a_ptrW3( a_ptrW2 );
+				auto a_ptrW4( a_ptrW3 );
+				Assert::IsTrue( !a_ptrW0.expired() );
+				a_ptrW0.reset();
+				Assert::IsTrue( a_ptrW0.expired() );
+				a_ptrW0.reset();
+				a_ptrW0.reset();
+				Assert::AreEqual( 3, static_cast< int >( a_ptr0.use_count() ) );
+				Assert::AreEqual( 0, static_cast< int >( a_ptrW0.use_count() ) );
+				Assert::AreEqual( 3, static_cast< int >( a_ptrW1.use_count() ) );
+				Assert::IsTrue( !a_ptrW1.expired() );
+			}
+			{
+				// lock empty weak_ptr r-value shared_ptr
+				WeakPtr<int> a_ptr0( SharedPtr<int>( new int( 4 ) ) );
+				auto a_ptr1 = a_ptr0.lock();
+				Assert::IsTrue( a_ptr0.expired() );	// from empty weak_ptr (Use_ == 0) we cant create shared_ptr
+			}
+			{
+				// lock not empty weak_ptr:
+				//	copy-ctr shared_ptr from not empty weak_ptr
+				SharedPtr<int> a_ptr0( new int( 4 ) );
+				auto a_ptr1( a_ptr0 );
+				Assert::AreEqual( 2, static_cast< int >( a_ptr0.use_count() ) );
+				a_ptr0.reset();
+				Assert::IsNull( a_ptr0.get() );
+				Assert::AreEqual( 0, static_cast< int >( a_ptr0.use_count() ) );
+				Assert::AreEqual( 1, static_cast< int >( a_ptr1.use_count() ) );
+				WeakPtr<int> a_ptr2( a_ptr1 );
 				a_ptr0 = a_ptr2.lock();
 				Assert::AreEqual( 2, static_cast< int >( a_ptr0.use_count() ) );
 				Assert::AreEqual( 2, static_cast< int >( a_ptr1.use_count() ) );
