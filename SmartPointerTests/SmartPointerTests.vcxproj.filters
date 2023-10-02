@@ -13,10 +13,16 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Исходные файлы\MySmartPointerWithRefCount">
+      <UniqueIdentifier>{448b4e23-13ee-4698-809e-366dc1986b40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SmartPointerTests.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MySmartPointerWithRefCount\RefCountTests.cpp">
+      <Filter>Исходные файлы\MySmartPointerWithRefCount</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

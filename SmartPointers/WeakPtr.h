@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SharedPtr.h"
+
 template<class T>
 class WeakPtr
 {
@@ -10,6 +12,7 @@ public:
 
   // default_ctr nullptr
   WeakPtr() = default;
+  ~WeakPtr() = default;
 
   // copy_ctr weak-weak
   WeakPtr( const WeakPtr<T> & weakPtr )

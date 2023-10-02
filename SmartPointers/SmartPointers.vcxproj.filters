@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Исходные файлы\MySmartPointerWithRefCount">
+      <UniqueIdentifier>{7dbfb4a0-a037-43ab-a84b-88dc2e6e4c0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AutoPtr.h">
@@ -29,6 +32,15 @@
     </ClInclude>
     <ClInclude Include="WeakPtr.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="RefCount.h">
+      <Filter>Исходные файлы\MySmartPointerWithRefCount</Filter>
+    </ClInclude>
+    <ClInclude Include="RefCountPointer.h">
+      <Filter>Исходные файлы\MySmartPointerWithRefCount</Filter>
+    </ClInclude>
+    <ClInclude Include="IRefCount.h">
+      <Filter>Исходные файлы\MySmartPointerWithRefCount</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
