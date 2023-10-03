@@ -60,7 +60,9 @@ public:
   // dtr
   ~SharedPtr()
   {
-    if ( rep_use_ && ( *rep_use_ )-- == 0 )
+    if ( rep_use_ && 
+         ( *rep_use_ == 0 ||
+         --( *rep_use_ ) == 0 ) )
     {
       delete rep_use_;
       rep_use_ = nullptr;
