@@ -1,6 +1,6 @@
-#include "../../SmartPointers/RefCountPointer.h"
-#include "../../SmartPointers/RefCount.h"
-#include "../../SmartPointers/IRefCount.h"
+#include "../../SmartPointers/MySmartPointersWithRefCount/RefCountPointer.h"
+#include "../../SmartPointers/MySmartPointersWithRefCount/RefCount.h"
+#include "../../SmartPointers/MySmartPointersWithRefCount/IRefCount.h"
 
 #include "CppUnitTest.h"
 

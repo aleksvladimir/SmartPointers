@@ -145,9 +145,9 @@
   <ItemGroup>
     <ClInclude Include="AutoPtr.h" />
     <ClInclude Include="BaseStrongPtr.h" />
-    <ClInclude Include="RefCountPointer.h" />
-    <ClInclude Include="IRefCount.h" />
-    <ClInclude Include="RefCount.h" />
+    <ClInclude Include="MySmartPointersWithRefCount\IRefCount.h" />
+    <ClInclude Include="MySmartPointersWithRefCount\RefCount.h" />
+    <ClInclude Include="MySmartPointersWithRefCount\RefCountPointer.h" />
     <ClInclude Include="SharedPtr.h" />
     <ClInclude Include="UniquePtr.h" />
     <ClInclude Include="WeakPtr.h" />

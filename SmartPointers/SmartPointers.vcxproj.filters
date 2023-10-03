@@ -33,13 +33,13 @@
     <ClInclude Include="WeakPtr.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="RefCount.h">
+    <ClInclude Include="MySmartPointersWithRefCount\IRefCount.h">
       <Filter>Исходные файлы\MySmartPointerWithRefCount</Filter>
     </ClInclude>
-    <ClInclude Include="RefCountPointer.h">
+    <ClInclude Include="MySmartPointersWithRefCount\RefCount.h">
       <Filter>Исходные файлы\MySmartPointerWithRefCount</Filter>
     </ClInclude>
-    <ClInclude Include="IRefCount.h">
+    <ClInclude Include="MySmartPointersWithRefCount\RefCountPointer.h">
       <Filter>Исходные файлы\MySmartPointerWithRefCount</Filter>
     </ClInclude>
   </ItemGroup>
