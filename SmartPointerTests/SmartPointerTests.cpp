@@ -1,11 +1,26 @@
+
+#include <algorithm>
+#include <vector>
+
+static unsigned int allocCounter = 0;
+
+void * operator new( size_t size )
+{
+	allocCounter++;
+	return malloc( size );
+}
+
+void operator delete( void * p ) noexcept
+{
+	allocCounter--;
+	free( p );
+}
+
 #include "..\SmartPointers\WeakPtr.h"
 #include "..\SmartPointers\SharedPtr.h"
 #include "..\SmartPointers\UniquePtr.h"
 #include "..\SmartPointers\AutoPtr.h"
 #include "CppUnitTest.h"
-
-#include <algorithm>
-#include <vector>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -177,7 +192,6 @@ namespace SmartPointerTests
 			Assert::AreNotEqual( 4, *p );
 		}
 
-
 		TEST_METHOD( Test_std_shared_ptr )
 		{
 			// default_ctr
@@ -249,6 +263,28 @@ namespace SmartPointerTests
 
 		TEST_METHOD( Test_MySharedPtr )
 		{
+			{
+		    // default_ctr
+			  SharedPtr<int> a_ptr0;
+				Assert::IsTrue( allocCounter == 2 );
+		  }
+			Assert::IsTrue( allocCounter == 0 );
+
+			{
+				// default_ctr
+				SharedPtr<int> a_ptr0( new int( 1 ) );
+				Assert::IsTrue( allocCounter == 2 );
+			}
+			Assert::IsTrue( allocCounter == 0 );
+
+			{
+				// default_ctr
+				SharedPtr<int> a_ptr0( new int( 1 ) );
+				SharedPtr<int> a_ptr1( a_ptr0 );
+				Assert::IsTrue( allocCounter == 2 );
+			}
+			Assert::IsTrue( allocCounter == 0 );
+
 			// default_ctr
 			SharedPtr<int> a_ptr0;
 			Assert::AreEqual( 0, static_cast< int >( a_ptr0.use_count() ) );
