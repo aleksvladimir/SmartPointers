@@ -220,6 +220,35 @@ namespace SmartPointerTests
 		{
 			allocCounter = 0;
 
+			{
+				// copy_operator
+				std::shared_ptr<int> p2( new int( 22 ) );	// p2.c=1
+				std::shared_ptr<int> p22( p2 );						// p2.c=2 p22.c=2 
+				std::shared_ptr<int> p1( new int( 11 ) );	// p1.c=1
+				Assert::IsTrue( allocCounter == 4 );
+				Assert::AreEqual( 2, static_cast< int >( p22.use_count() ) );
+				Assert::AreEqual( 1, static_cast< int >( p1.use_count() ) );
+				p2 = p1;	// p22.c=1. p1.c=2 (p1 -> p2 -> 11)
+				Assert::AreEqual( 1, static_cast< int >( p22.use_count() ) );
+				Assert::AreEqual( 2, static_cast< int >( p1.use_count() ) );
+				Assert::IsTrue( allocCounter == 4 );
+			}
+			Assert::IsTrue( allocCounter == 0 );
+
+			{
+				// copy_operator
+				std::shared_ptr<int> ref2( new int( 22 ) );	// ref2.c=1
+				std::shared_ptr<int> ref1( new int( 11 ) );	// ref1.c=1
+				Assert::IsTrue( allocCounter == 4 );
+				Assert::AreEqual( 1, static_cast< int >( ref2.use_count() ) );
+				Assert::AreEqual( 1, static_cast< int >( ref1.use_count() ) );
+				ref2 = ref1;	// ref1.c=2 ref2.c=2 (ref1 -> ref2 -> 11)
+				Assert::AreEqual( 2, static_cast< int >( ref2.use_count() ) );
+				Assert::AreEqual( 2, static_cast< int >( ref1.use_count() ) );
+				Assert::IsTrue( allocCounter == 2 );
+			}
+			Assert::IsTrue( allocCounter == 0 );
+
 			// default_ctr
 			std::shared_ptr<int> a_ptr0;
 			Assert::AreEqual( 0, static_cast< int >( a_ptr0.use_count() ) );
@@ -317,6 +346,47 @@ namespace SmartPointerTests
 		      Assert::IsTrue( allocCounter == 2 );
 			  }
 			  Assert::IsTrue( allocCounter == 0 );
+
+				{
+					// copy_operator
+					SharedPtr<int> ref2( new int( 22 ) );	// ref2.c=1
+					SharedPtr<int> ref22( ref2 );					// ref2.c=2 ref22.c=2 
+					SharedPtr<int> ref1( new int( 11 ) );	// ref1.c=1
+					Assert::IsTrue( allocCounter == 4 );
+					Assert::AreEqual( 2, static_cast< int >( ref22.use_count() ) );
+					Assert::AreEqual( 1, static_cast< int >( ref1.use_count() ) );
+					ref2 = ref1;	// ref22.c=1. ref1.c=2 (ref1 -> ref2 -> 11)
+					Assert::AreEqual( 1, static_cast< int >( ref22.use_count() ) );
+					Assert::AreEqual( 2, static_cast< int >( ref1.use_count() ) );
+					Assert::IsTrue( allocCounter == 4 );
+				}
+				Assert::IsTrue( allocCounter == 0 );
+
+				{
+					// copy_operator
+					SharedPtr<int> ref2( new int( 22 ) );	// ref2.c=1
+					SharedPtr<int> ref1( new int( 11 ) );	// ref1.c=1
+					Assert::IsTrue( allocCounter == 4 );
+					Assert::AreEqual( 1, static_cast< int >( ref2.use_count() ) );
+					Assert::AreEqual( 1, static_cast< int >( ref1.use_count() ) );
+					ref2 = ref1;	// ref1.c=2 ref2.c=2 (ref1 -> ref2 -> 11)
+					Assert::AreEqual( 2, static_cast< int >( ref2.use_count() ) );
+					Assert::AreEqual( 2, static_cast< int >( ref1.use_count() ) );
+					Assert::IsTrue( allocCounter == 2 );
+				}
+				Assert::IsTrue( allocCounter == 0 );
+
+
+				{
+					// move_operator
+					SharedPtr<int> p2( new int( 22 ) );
+					SharedPtr<int> p22( p2 );
+					SharedPtr<int> p1( new int( 11 ) );
+					Assert::IsTrue( allocCounter == 4 );
+					p2 = std::move( p1 );
+					Assert::IsTrue( allocCounter == 4 );
+				}
+				Assert::IsTrue( allocCounter == 0 );
 
 			  // default_ctr
 			  SharedPtr<int> a_ptr0;

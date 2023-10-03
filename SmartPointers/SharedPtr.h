@@ -28,10 +28,10 @@ public:
   // copy_operator
   SharedPtr & operator = ( SharedPtr & right )
   {
-    if ( myPtr_ != right.myPtr_ )
-      delete myPtr_;
-    if ( rep_use_ != right.rep_use_ )
-      delete rep_use_;
+    bool isOwner = myPtr_ == right.myPtr_;
+    if ( !isOwner )
+      ( *this ).~SharedPtr(); // clear self memory with check rep_use
+
     myPtr_ = right.myPtr_;
     ++( *right.rep_use_ );
     rep_use_ = right.rep_use_;
@@ -52,15 +52,17 @@ public:
   {
     // TODO: SharedPtr( std::move( right ) ).swap( *this );
     // TODO: void swap( SharedPtr &  )
-    if ( myPtr_ != right.myPtr_ )
-      delete myPtr_;
-    if ( rep_use_ != right.rep_use_ )
-      delete rep_use_;
+
+    bool isOwner = myPtr_ == right.myPtr_;
+    if ( !isOwner )
+      ( *this ).~SharedPtr(); // clear self memory with check rep_use
+    
     myPtr_ = right.myPtr_;
     rep_use_ = right.rep_use_;
     right.myPtr_ = nullptr;
     right.rep_use_ = nullptr;
-    ( *rep_use_ )--;
+    if ( isOwner )
+      --( *rep_use_ );  // decrement rep_use when does absorption occur
     return *this;
   }
 
